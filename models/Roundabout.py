@@ -1,14 +1,11 @@
 from mesa import Agent, Model 
-from mesa.space import MultiGrid 
-from mesa import time
-from time import SimultaneousActivation 
+from mesa.space import MultiGrid  
 from mesa.visualization import CanvasGrid, ModularServer 
 import numpy as np 
 
 class RoundaboutModel(Model): 
     def __init__(self, width, height, num_agents): 
         self.grid = MultiGrid(width, height, torus=False) 
-        self.schedule = SimultaneousActivation(self) 
         self.num_agents = num_agents 
 
         #Define roundabout center and radius 
