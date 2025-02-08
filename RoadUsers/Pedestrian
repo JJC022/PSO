@@ -1,0 +1,32 @@
+from mesa import Agent
+from models.SocialForce import calculate_social_force
+
+class Pedestrian(Agent):
+    def __init__(self, model):
+        super().__init__(model)
+        self.speed = 1  # Example speed
+        self.direction = (1, 0)  # Example direction
+
+    def step(self):
+        # Decision-making logic for pedestrians
+        new_position = (
+            self.pos[0] + self.direction[0],
+            self.pos[1] + self.direction[1]
+        )
+        # Check if the new position is within grid bounds
+        if (0 <= new_position[0] < self.model.grid.width and
+            0 <= new_position[1] < self.model.grid.height and
+            self.model.grid.is_cell_empty(new_position)):
+            self.model.grid.move_agent(self, new_position)
+    def social_force(self): 
+        force = calculate_social_force(self, self.model.agents, obstacles=self.model.grid)
+
+    def agent_portrayal(agent):
+        portrayal = {"Filled": "true", "Layer": 0}
+        
+        portrayal.update({
+                "Shape": "circle",
+                "color": "tab:red",
+                "r": 0.5
+            })
+        return portrayal

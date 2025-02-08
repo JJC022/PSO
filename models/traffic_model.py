@@ -3,44 +3,7 @@ from mesa.space import MultiGrid, PropertyLayer
 from mesa.visualization import SolaraViz, make_space_component, make_plot_component
 import numpy as np
 from SocialForce import calculate_social_force
-
-class Pedestrian(Agent):
-    def __init__(self, model):
-        super().__init__(model)
-        self.speed = 1  # Example speed
-        self.direction = (1, 0)  # Example direction
-
-    def step(self):
-        # Decision-making logic for pedestrians
-        new_position = (
-            self.pos[0] + self.direction[0],
-            self.pos[1] + self.direction[1]
-        )
-        # Check if the new position is within grid bounds
-        if (0 <= new_position[0] < self.model.grid.width and
-            0 <= new_position[1] < self.model.grid.height and
-            self.model.grid.is_cell_empty(new_position)):
-            self.model.grid.move_agent(self, new_position)
-    def social_force(self): 
-        force = calculate_social_force(self, self.model.agents, obstacles=self.model.grid)
-
-class Bicycle(Agent):
-    def __init__(self, model):
-        super().__init__(model)
-        self.speed = 2  # Example speed
-        self.direction = (0, 1)  # Example direction
-
-    def step(self):
-        # Decision-making logic for bicycles
-        new_position = (
-            self.pos[0] + self.direction[0],
-            self.pos[1] + self.direction[1]
-        )
-        # Check if the new position is within grid bounds
-        if (0 <= new_position[0] < self.model.grid.width and
-            0 <= new_position[1] < self.model.grid.height and
-            self.model.grid.is_cell_empty(new_position)):
-            self.model.grid.move_agent(self, new_position)
+from RoadUsers import Bicycle, Pedestrian
 
 class PedestrianBicycleModel(Model):
     def __init__(self, width, height, num_pedestrians, num_bicycles):
@@ -82,30 +45,6 @@ class PedestrianBicycleModel(Model):
         self.agents.shuffle_do("step")
         self.datacollector.collect(self)
 
-def agent_portrayal(agent):
-    portrayal = {"Filled": "true", "Layer": 0}
-    
-    if isinstance(agent, Pedestrian):
-        portrayal.update({
-            "Shape": "circle",
-            "color": "tab:red",
-            "r": 0.5
-        })
-    elif isinstance(agent, Bicycle):
-        portrayal.update({
-            "Shape": "circle",
-            "color": "tab:blue",
-            "r": 0.8
-        })
-    return portrayal
-
-def show_steps(model):
-    return f"Steps: {model.steps}"
-
-
-
-
-
 
 model_params = {
     "width": 10, 
@@ -114,6 +53,20 @@ model_params = {
    "num_bicycles": 10  
     
 }
+
+traffic_model = PedestrianBicycleModel(width=10, height=10, num_bicycles=10, num_pedestrians=10)
+SpaceGraph = make_space_component(Pedestrian.agent_portrayal)
+# Visualization setup
+page = SolaraViz(
+    traffic_model, 
+    components = [SpaceGraph], 
+    model_params=model_params, 
+    name = "Please work"
+)
+page
+
+
+
 """
 "width": {
         "type": "SliderInt",
@@ -149,14 +102,3 @@ model_params = {
    }
 
 """
-
-traffic_model = PedestrianBicycleModel(width=10, height=10, num_bicycles=10, num_pedestrians=10)
-SpaceGraph = make_space_component(agent_portrayal)
-# Visualization setup
-page = SolaraViz(
-    traffic_model, 
-    components = [SpaceGraph], 
-    model_params=model_params, 
-    name = "Please work"
-)
-page
