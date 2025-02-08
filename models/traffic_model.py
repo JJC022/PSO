@@ -1,7 +1,8 @@
-from mesa import Agent, Model
-from mesa.space import MultiGrid
+from mesa import Agent, Model, DataCollector
+from mesa.space import MultiGrid, PropertyLayer
 from mesa.visualization import SolaraViz, make_space_component, make_plot_component
 import numpy as np
+from SocialForce import calculate_social_force
 
 class Pedestrian(Agent):
     def __init__(self, model):
@@ -20,6 +21,8 @@ class Pedestrian(Agent):
             0 <= new_position[1] < self.model.grid.height and
             self.model.grid.is_cell_empty(new_position)):
             self.model.grid.move_agent(self, new_position)
+    def social_force(self): 
+        force = calculate_social_force(self, self.model.agents, obstacles=self.model.grid)
 
 class Bicycle(Agent):
     def __init__(self, model):
@@ -43,6 +46,14 @@ class PedestrianBicycleModel(Model):
     def __init__(self, width, height, num_pedestrians, num_bicycles):
         super().__init__()
         self.grid = MultiGrid(width, height, True)
+
+        self.grid.add_property_layer(property_layer=PropertyLayer(name = "obstacles", width=width, height=height))
+
+        #initalize datacollector
+        self.datacollector = DataCollector(
+            model_reporters={"mean speed": lambda m: m.agents.agg("speed", np.mean)}, 
+            agent_reporters={"position": "pos"}
+        )
         self.num_pedestrians = num_pedestrians
         self.num_bicycles = num_bicycles
         
@@ -54,23 +65,22 @@ class PedestrianBicycleModel(Model):
         x = self.rng.integers(0, self.grid.width, size = (num_bicycles, ))
         y = np.zeros(shape = (num_bicycles, ), dtype= np.int64)
 
+        #place cyclists on grid
+        for a, i, j in zip(cyclists, x, y):
+            self.grid.place_agent(a, (i,j))
+
         #generate postiions of pedestrians at left side of grid
         x = np.zeros(shape = (num_pedestrians, ), dtype= np.int64) 
         y = self.rng.integers(0, self.grid.height, size = (num_bicycles, ))
-        
-        #place cyclists on grid
-        for a, i , j in zip(cyclists, x, y):
-            self.grid.place_agent(a, (i,j))
 
         #place pedestrians on grid
         for a, i , j in zip(pedestrians, x, y):
             self.grid.place_agent(a, (i,j))
 
-
-
     def step(self):
         # Random agent activation order - consider replacign with simultaneous activation, .do("step") then .do("advance")
         self.agents.shuffle_do("step")
+        self.datacollector.collect(self)
 
 def agent_portrayal(agent):
     portrayal = {"Filled": "true", "Layer": 0}
@@ -78,13 +88,13 @@ def agent_portrayal(agent):
     if isinstance(agent, Pedestrian):
         portrayal.update({
             "Shape": "circle",
-            "Color": "red",
+            "color": "tab:red",
             "r": 0.5
         })
     elif isinstance(agent, Bicycle):
         portrayal.update({
             "Shape": "circle",
-            "Color": "blue",
+            "color": "tab:blue",
             "r": 0.8
         })
     return portrayal
@@ -94,32 +104,54 @@ def show_steps(model):
 
 
 
-traffic_model = PedestrianBicycleModel(width=200, height=200, num_bicycles=10, num_pedestrians=10)
 
-SpaceGraph = make_space_component(agent_portrayal)
-# Corrected step call
-for _ in range(10): 
-    traffic_model.step()
+
+
 model_params = {
-    "num_bicycles": {
+    "width": 10, 
+   "height": 10,
+   "num_pedestrians": 10, 
+   "num_bicycles": 10  
+    
+}
+"""
+"width": {
         "type": "SliderInt",
         "value": 50,
+        "label": "Width",
+        "min": 5,
+        "max": 60,
+        "step": 1,
+    },
+    "height": {
+        "type": "SliderInt",
+        "value": 50,
+        "label": "Height",
+        "min": 5,
+        "max": 60,
+        "step": 1,
+    },
+   "num_bicycles": {
+        "type": "SliderInt",
+        "value": 10,
         "label": "Number of bicycles:",
-        "min": 10,
-        "max": 100,
+        "min": 1,
+        "max": 20,
         "step": 1,
    },
    "num_pedestrians": {
         "type": "SliderInt",
-        "value": 50,
+        "value": 10,
         "label": "Number of pedestrians:",
-        "min": 10,
-        "max": 100,
+        "min": 1,
+        "max": 20,
         "step": 1,
-   },
-   "width": 10, 
-   "height": 10
-}
+   }
+
+"""
+
+traffic_model = PedestrianBicycleModel(width=10, height=10, num_bicycles=10, num_pedestrians=10)
+SpaceGraph = make_space_component(agent_portrayal)
 # Visualization setup
 page = SolaraViz(
     traffic_model, 

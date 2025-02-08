@@ -1,6 +1,6 @@
 from mesa import Agent, Model 
-from mesa.space import MultiGrid  
-from mesa.visualization import CanvasGrid, ModularServer 
+from mesa.space import MultiGrid, PropertyLayer
+from mesa.visualization import SolaraViz, make_space_component, make_plot_component
 import numpy as np 
 
 class RoundaboutModel(Model): 
