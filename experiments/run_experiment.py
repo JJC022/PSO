@@ -1,12 +1,12 @@
 import os 
 import json 
 import pandas as pd
-from models import traffic_model 
+from models import PedestrianBicycleModel 
 
 def run_experiment(params, output_dir): 
     os.makedirs(output_dir, exist_ok=True) 
     # Run the simulation 
-    model = traffic_model(**params) 
+    model = PedestrianBicycleModel(**params) 
     for _ in range(100): 
         # Run for 100 steps 
         model.step() 
