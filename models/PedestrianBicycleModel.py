@@ -4,7 +4,7 @@ import numpy as np
 from RoadUsers import Bicycle, Pedestrian
 
 class PedestrianBicycleModel(Model):
-    def __init__(self, width, height, num_pedestrians, num_bicycles):
+    def __init__(self, width=10, height=10, num_pedestrians=10, num_bicycles=10):
         super().__init__()
         self.grid = MultiGrid(width, height, True)
 
@@ -17,6 +17,8 @@ class PedestrianBicycleModel(Model):
         )
         self.num_pedestrians = num_pedestrians
         self.num_bicycles = num_bicycles
+
+        
         
         # Create pedestrians and bicycles
         pedestrians = Pedestrian.create_agents(model= self, n=num_pedestrians)

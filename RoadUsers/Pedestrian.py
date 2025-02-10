@@ -1,5 +1,5 @@
 from mesa import Agent
-from models.SocialForce import calculate_social_force
+from Movement import SocialForce
 
 class Pedestrian(Agent):
     def __init__(self, model):
@@ -19,7 +19,7 @@ class Pedestrian(Agent):
             self.model.grid.is_cell_empty(new_position)):
             self.model.grid.move_agent(self, new_position)
     def social_force(self): 
-        force = calculate_social_force(self, self.model.agents, obstacles=self.model.grid)
+        force = SocialForce.calculate_social_force(self, self.model.agents, obstacles=self.model.grid)
 
     def agent_portrayal(agent):
         portrayal = {"Filled": "true", "Layer": 0}

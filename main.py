@@ -10,7 +10,7 @@ model_params = {
     
 }
 
-traffic_model = PedestrianBicycleModel(width=10, height=10, num_bicycles=10, num_pedestrians=10)
+traffic_model = PedestrianBicycleModel.PedestrianBicycleModel(width=10, height=10, num_bicycles=10, num_pedestrians=10)
 SpaceGraph = make_space_component((Pedestrian.agent_portrayal, Bicycle.agent_portrayal))
 # Visualization setup
 page = SolaraViz(
