@@ -16,6 +16,7 @@ def calculate_social_force(agent, other_agents, obstacles, goal, A=2.0, B=1.5, l
     Returns:
         np.array: The resultant force vector (direction and magnitude).
     """
+    
     # Driving force: Directs the agent toward its goal
     desired_direction = np.array(goal) - np.array(agent.pos)
     desired_velocity = desired_direction / np.linalg.norm(desired_direction) * agent.desired_speed

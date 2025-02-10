@@ -12,13 +12,11 @@ class PedestrianBicycleModel(Model):
 
         #initalize datacollector
         self.datacollector = DataCollector(
-            model_reporters={"mean speed": lambda m: m.agents.agg("speed", np.mean)}, 
+            model_reporters={"mean velocity": lambda m: m.agents.agg("velocity", np.mean)}, 
             agent_reporters={"position": "pos"}
         )
         self.num_pedestrians = num_pedestrians
         self.num_bicycles = num_bicycles
-
-        
         
         # Create pedestrians and bicycles
         pedestrians = Pedestrian.create_agents(model= self, n=num_pedestrians)

@@ -11,7 +11,17 @@ model_params = {
 }
 
 traffic_model = PedestrianBicycleModel.PedestrianBicycleModel(width=10, height=10, num_bicycles=10, num_pedestrians=10)
-SpaceGraph = make_space_component((Pedestrian.agent_portrayal, Bicycle.agent_portrayal))
+def traffic_model_portrayal(agent):
+    if agent is None: 
+        return 
+    if isinstance(agent, Pedestrian): 
+        portrayal = Pedestrian.agent_portrayal(agent)
+    if isinstance(agent, Bicycle): 
+        portrayal = Bicycle.agent_portrayal(agent)
+
+    return portrayal
+
+SpaceGraph = make_space_component(traffic_model_portrayal)
 # Visualization setup
 page = SolaraViz(
     traffic_model, 
