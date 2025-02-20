@@ -40,6 +40,7 @@ class PedestrianBicycleModel(Model):
 
     def step(self):
         # Random agent activation order - consider replacign with simultaneous activation, .do("step") then .do("advance")
+        print(f"position of first agent: {self.agents[0].pos} velocity of first agent: {self.agents[0].velocity}")
         self.agents.shuffle_do("step")
         self.datacollector.collect(self)
 

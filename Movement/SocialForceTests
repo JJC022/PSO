@@ -1,0 +1,37 @@
+import unittest
+import numpy as np
+from SocialForce import calculate_social_force
+
+class Agent:
+    def __init__(self, pos, velocity, desired_speed):
+        self.pos = pos
+        self.velocity = velocity
+        self.desired_speed = desired_speed
+
+class TestSocialForce(unittest.TestCase):
+    def test_driving_force(self):
+        agent = Agent(pos=[0, 0], velocity=[1, 1], desired_speed=1.0)
+        other_agents = []
+        obstacles = []
+        goal = [5, 5]
+        force = calculate_social_force(agent, other_agents, obstacles, goal)
+        self.assertFalse(np.isnan(force).any(), "Force contains NaN values")
+    
+    def test_repulsive_force_from_agents(self):
+        agent = Agent(pos=[0, 0], velocity=[1, 1], desired_speed=1.0)
+        other_agents = [Agent(pos=[1, 1], velocity=[0, 0], desired_speed=1.0)]
+        obstacles = []
+        goal = [5, 5]
+        force = calculate_social_force(agent, other_agents, obstacles, goal)
+        self.assertFalse(np.isnan(force).any(), "Force contains NaN values")
+    
+    def test_repulsive_force_from_obstacles(self):
+        agent = Agent(pos=[0, 0], velocity=[1, 1], desired_speed=1.0)
+        other_agents = []
+        obstacles = [[2, 2]]
+        goal = [5, 5]
+        force = calculate_social_force(agent, other_agents, obstacles, goal)
+        self.assertFalse(np.isnan(force).any(), "Force contains NaN values")
+
+if __name__ == "__main__":
+    unittest.main()

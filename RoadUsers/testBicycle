@@ -1,0 +1,13 @@
+import unittest
+import numpy as np
+from ..models import PedestrianBicycleModel
+
+class TestPedestrianBicycleModel(unittest.TestCase):
+    def test_agent_initialization(self):
+        model = PedestrianBicycleModel()
+        for agent in model.agents:
+            self.assertFalse(np.isnan(agent.pos).any(), "Agent position contains NaN values")
+            self.assertFalse(np.isnan(agent.velocity).any(), "Agent velocity contains NaN values")
+
+if __name__ == "__main__":
+    unittest.main()

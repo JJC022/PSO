@@ -21,6 +21,7 @@ def calculate_social_force(agent, other_agents, obstacles, goal, A=2.0, B=1.5, l
     desired_direction = np.array(goal) - np.array(agent.pos)
     desired_velocity = desired_direction / np.linalg.norm(desired_direction) * agent.desired_speed
     driving_force = (desired_velocity - np.array(agent.velocity)) / tau
+    print(f"Driving force: {driving_force}, Desired velocity: {desired_velocity}, Agent velocity: {agent.velocity}"), 
 
     # Repulsive force from other agents
     repulsive_force = np.array([0.0, 0.0])
@@ -46,3 +47,19 @@ def calculate_social_force(agent, other_agents, obstacles, goal, A=2.0, B=1.5, l
     # Total force
     total_force = driving_force + repulsive_force
     return total_force
+
+if __name__ == "__main__":
+    # Example test case
+    class Agent:
+        def __init__(self, pos, velocity, desired_speed):
+            self.pos = pos
+            self.velocity = velocity
+            self.desired_speed = desired_speed
+
+    agent = Agent(pos=[0, 0], velocity=[1, 1], desired_speed=1.0)
+    other_agents = [Agent(pos=[1, 1], velocity=[0, 0], desired_speed=1.0)]
+    obstacles = [[2, 2]]
+    goal = [5, 5]
+
+    force = calculate_social_force(agent, other_agents, obstacles, goal)
+    print("Calculated force:", force)

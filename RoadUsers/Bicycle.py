@@ -18,6 +18,7 @@ class Bicycle(Agent):
         # Decision-making logic for bicycles
         self.update_velocity(self.model)
         self.update_acceleration(self.model)
+        print(f"Before Step: Agent position: {self.pos}, Agent velocity: {self.velocity}, Agent acceleration: {self.acceleration}")
         new_position = (
             int(self.pos[0] + self.velocity[0]),
             int(self.pos[1] + self.velocity[1])
