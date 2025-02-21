@@ -67,3 +67,9 @@ page
      }
 }
 """
+if __name__ == "__main__":
+    model = PedestrianBicycleModel.PedestrianBicycleModel(width=10, height=10, num_pedestrians=10, num_bicycles=10)
+    for _ in range(10):
+        model.step()
+        print(f"position of first agent: {model.agents[0].pos} velocity of first agent: {model.agents[0].velocity}")
+

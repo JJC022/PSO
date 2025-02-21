@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from SocialForce import calculate_social_force
+from Movement.SocialForce import calculate_social_force
 
 class Agent:
     def __init__(self, pos, velocity, desired_speed):

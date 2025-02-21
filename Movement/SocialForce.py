@@ -19,9 +19,12 @@ def calculate_social_force(agent, other_agents, obstacles, goal, A=2.0, B=1.5, l
     
     # Driving force: Directs the agent toward its goal
     desired_direction = np.array(goal) - np.array(agent.pos)
-    desired_velocity = desired_direction / np.linalg.norm(desired_direction) * agent.desired_speed
+    norm_desired_direction = np.linalg.norm(desired_direction)
+    if norm_desired_direction == 0:
+        desired_velocity = np.array([0.0, 0.0])
+    else:
+        desired_velocity = desired_direction / norm_desired_direction * agent.desired_speed
     driving_force = (desired_velocity - np.array(agent.velocity)) / tau
-    print(f"Driving force: {driving_force}, Desired velocity: {desired_velocity}, Agent velocity: {agent.velocity}"), 
 
     # Repulsive force from other agents
     repulsive_force = np.array([0.0, 0.0])
@@ -31,10 +34,7 @@ def calculate_social_force(agent, other_agents, obstacles, goal, A=2.0, B=1.5, l
             distance = np.linalg.norm(diff)
             if distance > 0:
                 direction = diff / distance
-                # Anisotropic term (preference for front interactions)
-                theta = np.arccos(np.dot(agent.velocity / np.linalg.norm(agent.velocity), direction))
-                anisotropic_factor = lambda_ + (1 - lambda_) * (1 + np.cos(theta)) / 2
-                repulsive_force += A * np.exp(-distance / B) * direction * anisotropic_factor
+                repulsive_force += A * np.exp(-distance / B) * direction
 
     # Repulsive force from obstacles
     for obstacle in obstacles:

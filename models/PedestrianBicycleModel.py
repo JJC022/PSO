@@ -8,7 +8,7 @@ class PedestrianBicycleModel(Model):
         super().__init__()
         self.grid = MultiGrid(width, height, True)
 
-        self.grid.add_property_layer(property_layer=PropertyLayer(name = "obstacles", width=width, height=height, default_value=0))
+        #self.grid.add_property_layer(property_layer=PropertyLayer(name = "obstacles", width=width, height=height, default_value=0))
 
         #initalize datacollector
         self.datacollector = DataCollector(
@@ -43,5 +43,6 @@ class PedestrianBicycleModel(Model):
         print(f"position of first agent: {self.agents[0].pos} velocity of first agent: {self.agents[0].velocity}")
         self.agents.shuffle_do("step")
         self.datacollector.collect(self)
+
 
 
