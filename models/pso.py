@@ -7,6 +7,7 @@ class PSO:
         self.bounds = bounds 
         self.model_class = model_class 
         self.model_params = model_params 
+
         # Initialize particles and velocities 
         self.particles = np.random.uniform(bounds[0], bounds[1], (n_particles, dimensions)) 
         self.velocities = np.random.uniform(-1, 1, (n_particles, dimensions)) 
@@ -14,6 +15,8 @@ class PSO:
         self.best_scores = np.array([self.fitness(p) for p in self.particles])
         self.global_best_position = self.best_positions[np.argmin(self.best_scores)] 
         self.global_best_score = np.min(self.best_scores) 
+
+
     def fitness(self, particle): 
         # Use the particle to configure the map (e.g., adjust lanes or obstacles) 
         # # Run the simulation and return the number of collisions 
@@ -22,6 +25,7 @@ class PSO:
             # Run for 10 steps 
             model.step() 
             return model.count_collisions() 
+        
     def optimize(self, n_iterations): 
         for _ in range(n_iterations): 
             for i in range(self.n_particles): 

@@ -3,14 +3,14 @@ from models import PedestrianBicycleModel
 from RoadUsers import Pedestrian, Bicycle
 
 model_params = {
-    "width": 10, 
-   "height": 10,
+    "width": 100, 
+   "height": 100,
    "num_pedestrians": 10, 
    "num_bicycles": 10  
     
 }
 
-traffic_model = PedestrianBicycleModel.PedestrianBicycleModel(width=10, height=10, num_bicycles=10, num_pedestrians=10)
+traffic_model = PedestrianBicycleModel.PedestrianBicycleModel(width=100, height=100, num_bicycles=10, num_pedestrians=10)
 def traffic_model_portrayal(agent):
     if agent is None: 
         return 
@@ -68,7 +68,7 @@ page
 }
 """
 if __name__ == "__main__":
-    model = PedestrianBicycleModel.PedestrianBicycleModel(width=10, height=10, num_pedestrians=10, num_bicycles=10)
+    model = PedestrianBicycleModel.PedestrianBicycleModel(width=100, height=100, num_pedestrians=10, num_bicycles=10)
     for _ in range(10):
         model.step()
         print(f"position of first agent: {model.agents[0].pos} velocity of first agent: {model.agents[0].velocity}")

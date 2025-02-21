@@ -18,7 +18,7 @@ def calculate_social_force(agent, other_agents, obstacles, goal, A=2.0, B=1.5, l
     """
     
     # Driving force: Directs the agent toward its goal
-    desired_direction = np.array(goal) - np.array(agent.pos)
+    desired_direction = np.array(goal) - np.array(agent.position)
     #print(f"Desired direction: {desired_direction}")
     norm_desired_direction = np.linalg.norm(desired_direction)
     if norm_desired_direction == 0:
@@ -32,7 +32,7 @@ def calculate_social_force(agent, other_agents, obstacles, goal, A=2.0, B=1.5, l
     repulsive_force = np.array([0.0, 0.0])
     for other in other_agents:
         if other != agent:
-            diff = np.array(agent.pos) - np.array(other.pos)
+            diff = np.array(agent.position) - np.array(other.position)
             distance = np.linalg.norm(diff)
             if distance > 0:
                 direction = diff / distance
@@ -40,7 +40,7 @@ def calculate_social_force(agent, other_agents, obstacles, goal, A=2.0, B=1.5, l
 
     # Repulsive force from obstacles
     for obstacle in obstacles:
-        diff = np.array(agent.pos) - np.array(obstacle)
+        diff = np.array(agent.position) - np.array(obstacle)
         distance = np.linalg.norm(diff)
         if distance > 0:
             direction = diff / distance
@@ -48,18 +48,19 @@ def calculate_social_force(agent, other_agents, obstacles, goal, A=2.0, B=1.5, l
 
     # Total force
     total_force = driving_force + repulsive_force
+    #print(f"SocialForce:{total_force}")
     return total_force
 
 if __name__ == "__main__":
     # Example test case
     class Agent:
-        def __init__(self, pos, velocity, desired_speed):
-            self.pos = pos
+        def __init__(self, position, velocity, desired_speed):
+            self.position = position
             self.velocity = velocity
             self.desired_speed = desired_speed
 
-    agent = Agent(pos=[0, 0], velocity=[1, 1], desired_speed=1.0)
-    other_agents = [Agent(pos=[1, 1], velocity=[0, 0], desired_speed=1.0)]
+    agent = Agent(position=[0, 0], velocity=[1, 1], desired_speed=1.0)
+    other_agents = [Agent(position=[1, 1], velocity=[0, 0], desired_speed=1.0)]
     obstacles = [[2, 2]]
     goal = [5, 5]
 

@@ -1,12 +1,14 @@
-from mesa import Agent
+from mesa.experimental.continuous_space import ContinuousSpaceAgent
 from Movement import SocialForce
 import random
 import numpy as np
 
-class Bicycle(Agent):
-    def __init__(self, model):
-        super().__init__(model)
+class Bicycle(ContinuousSpaceAgent):
+    def __init__(self, model, space):
+        super().__init__(space, model)
+        self.space = space
         #give cyclist desired speed and goal of travel
+        self.position = np.random.randint(0, model.space.x_max), np.random.randint(0, model.space.y_max) 
         self._goal = np.array([0.0, 0.0])
         self.velocity = np.array([0.0, 0.0])
         self.acceleration = np.array([0.0, 0.0])
@@ -16,24 +18,10 @@ class Bicycle(Agent):
 
     def step(self):
         # Decision-making logic for bicycles
-        self.update_velocity(self.model)
         self.update_acceleration(self.model)
+        self.update_velocity(self.model)
         #print(f"Before Step: Agent position: {self.pos}, Agent velocity: {self.velocity}, Agent acceleration: {self.acceleration}")
-        new_position_x = self.pos[0] + self.velocity[0]
-        new_position_y = self.pos[1] + self.velocity[1]
-        
-        if not np.isnan(new_position_x) and not np.isnan(new_position_y):
-            new_position = (
-                int(new_position_x),
-                int(new_position_y)
-            )
-        else:
-            print(f"NaN detected in position calculation: pos={self.pos}, velocity={self.velocity}")
-            new_position = self.pos  # Keep the position unchanged if NaN is detected
-        # Check if the new position is within grid bounds
-        if (0 <= new_position[0] < self.model.grid.width and
-            0 <= new_position[1] < self.model.grid.height):
-                                    self.model.grid.move_agent(self, new_position)
+        self.position = self.position + self.velocity
 
     def update_acceleration(self, model, movement_model="social force"): 
         if movement_model == "social force": 

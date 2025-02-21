@@ -1,14 +1,20 @@
 from mesa import Agent, Model, DataCollector
-from mesa.space import ContinuousSpace, PropertyLayer
+from mesa.experimental.continuous_space import ContinuousSpace
 import numpy as np
 from RoadUsers import Bicycle, Pedestrian
 
 class PedestrianBicycleModel(Model):
-    def __init__(self, width=10, height=10, num_pedestrians=10, num_bicycles=10):
+    def __init__(self, width=100, height=100, num_pedestrians=10, num_bicycles=10):
         super().__init__()
-        self.grid = ContinuousSpace(width, height, True)
+        self.space = ContinuousSpace(
+            [[0, width], [0, height]],
+            torus=True,
+            random=self.random,
+            n_agents= num_bicycles + num_pedestrians,
+        )
 
-        #self.grid.add_property_layer(property_layer=PropertyLayer(name = "obstacles", width=width, height=height, default_value=0))
+
+        #self.space.add_property_layer(property_layer=PropertyLayer(name = "obstacles", width=width, height=height, default_value=0))
 
         #initalize datacollector
         self.datacollector = DataCollector(
@@ -19,24 +25,10 @@ class PedestrianBicycleModel(Model):
         self.num_bicycles = num_bicycles
         
         # Create pedestrians and bicycles
-        pedestrians = Pedestrian.create_agents(model= self, n=num_pedestrians)
-        cyclists = Bicycle.create_agents(model=self, n=num_bicycles)
+        pedestrians = Pedestrian.create_agents(model= self, n=num_pedestrians, space= self.space)
+        cyclists = Bicycle.create_agents(model=self, n=num_bicycles, space= self.space)
 
-        #generate postiions of bicycles at bottom of grid
-        x = self.rng.integers(0, self.grid.width, size = (num_bicycles, ))
-        y = np.zeros(shape = (num_bicycles, ), dtype= np.int64)
-
-        #place cyclists on grid
-        for a, i, j in zip(cyclists, x, y):
-            self.grid.place_agent(a, (i,j))
-
-        #generate postiions of pedestrians at left side of grid
-        x = np.zeros(shape = (num_pedestrians, ), dtype= np.int64) 
-        y = self.rng.integers(0, self.grid.height, size = (num_bicycles, ))
-
-        #place pedestrians on grid
-        for a, i , j in zip(pedestrians, x, y):
-            self.grid.place_agent(a, (i,j))
+    
 
     def step(self):
         # Random agent activation order - consider replacign with simultaneous activation, .do("step") then .do("advance")
