@@ -19,12 +19,14 @@ def calculate_social_force(agent, other_agents, obstacles, goal, A=2.0, B=1.5, l
     
     # Driving force: Directs the agent toward its goal
     desired_direction = np.array(goal) - np.array(agent.pos)
+    #print(f"Desired direction: {desired_direction}")
     norm_desired_direction = np.linalg.norm(desired_direction)
     if norm_desired_direction == 0:
         desired_velocity = np.array([0.0, 0.0])
     else:
         desired_velocity = desired_direction / norm_desired_direction * agent.desired_speed
     driving_force = (desired_velocity - np.array(agent.velocity)) / tau
+    #print(f"Driving force: {driving_force}")
 
     # Repulsive force from other agents
     repulsive_force = np.array([0.0, 0.0])

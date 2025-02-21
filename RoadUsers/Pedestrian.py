@@ -16,25 +16,24 @@ class Pedestrian(Agent):
 
     def step(self):
         # Decision-making logic for bicycles
-        print(f"Before Step: Agent position: {self.pos}, Agent velocity: {self.velocity}, Agent acceleration: {self.acceleration}")
+        #print(f"Before Step: Agent position: {self.pos}, Agent velocity: {self.velocity}, Agent acceleration: {self.acceleration}")
         self.update_velocity(self.model)
         self.update_acceleration(self.model)
         new_position_x = self.pos[0] + self.velocity[0]
         new_position_y = self.pos[1] + self.velocity[1]
         print(f"New position: {new_position_x}, {new_position_y}")
-        
+
         if not np.isnan(new_position_x) and not np.isnan(new_position_y):
             new_position = (
-                int(new_position_x),
-                int(new_position_y)
+                new_position_x,
+                new_position_y
             )
         else:
             print(f"NaN detected in position calculation: pos={self.pos}, velocity={self.velocity}")
             new_position = self.pos  # Keep the position unchanged if NaN is detected
         # Check if the new position is within grid bounds
         if (0 <= new_position[0] < self.model.grid.width and
-            0 <= new_position[1] < self.model.grid.height and
-            self.model.grid.is_cell_empty(new_position)):
+            0 <= new_position[1] < self.model.grid.height):
             self.model.grid.move_agent(self, new_position)
 
     def update_acceleration(self, model, movement_model="social force"): 

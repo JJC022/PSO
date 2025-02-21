@@ -1,12 +1,12 @@
 from mesa import Agent, Model, DataCollector
-from mesa.space import MultiGrid, PropertyLayer
+from mesa.space import ContinuousSpace, PropertyLayer
 import numpy as np
 from RoadUsers import Bicycle, Pedestrian
 
 class PedestrianBicycleModel(Model):
     def __init__(self, width=10, height=10, num_pedestrians=10, num_bicycles=10):
         super().__init__()
-        self.grid = MultiGrid(width, height, True)
+        self.grid = ContinuousSpace(width, height, True)
 
         #self.grid.add_property_layer(property_layer=PropertyLayer(name = "obstacles", width=width, height=height, default_value=0))
 
