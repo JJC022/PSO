@@ -31,12 +31,12 @@ class Bicycle(ContinuousSpaceAgent):
         self.velocity += self.acceleration
     
     def init_desired_speed(self, model): 
-        self.desired_speed = 15 * random.uniform(0.5, 1.0)
+        self.desired_speed = 1.2 * random.uniform(0.5, 1.0)
 
     def init_goal(self, model, destination="random"): 
         if destination == "random":
-            self._goal = (random.randint(0, model.grid.height - 1), 
-              random.randint(0, model.grid.width - 1))
+            self._goal = self._goal = (random.uniform(0, model.space.dimensions[0]), 
+              random.randint(0, random.uniform.space.dimensions[1]))
 
     def agent_portrayal(agent):
         portrayal = {"Filled": "true", "Layer": 0}

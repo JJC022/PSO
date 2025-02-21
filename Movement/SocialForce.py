@@ -19,14 +19,19 @@ def calculate_social_force(agent, other_agents, obstacles, goal, A=2.0, B=1.5, l
     
     # Driving force: Directs the agent toward its goal
     desired_direction = np.array(goal) - np.array(agent.position)
-    #print(f"Desired direction: {desired_direction}")
     norm_desired_direction = np.linalg.norm(desired_direction)
+    
+    # Scale the desired speed based on the distance to the goal
     if norm_desired_direction == 0:
         desired_velocity = np.array([0.0, 0.0])
     else:
-        desired_velocity = desired_direction / norm_desired_direction * agent.desired_speed
+        # Calculate the relative proximity to the goal
+        max_distance = np.linalg.norm([agent.model.space.dimensions[0], agent.model.space.dimensions[1]])
+        relative_proximity_goal = norm_desired_direction / max_distance
+        scaled_speed = agent.desired_speed * relative_proximity_goal
+        desired_velocity = desired_direction / norm_desired_direction * scaled_speed
+    
     driving_force = (desired_velocity - np.array(agent.velocity)) / tau
-    #print(f"Driving force: {driving_force}")
 
     # Repulsive force from other agents
     repulsive_force = np.array([0.0, 0.0])
@@ -48,7 +53,6 @@ def calculate_social_force(agent, other_agents, obstacles, goal, A=2.0, B=1.5, l
 
     # Total force
     total_force = driving_force + repulsive_force
-    #print(f"SocialForce:{total_force}")
     return total_force
 
 if __name__ == "__main__":
