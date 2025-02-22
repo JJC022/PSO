@@ -1,5 +1,5 @@
 import numpy as np
-
+#this can all be refactored to be more readible using functions from mesa.experimental.ContinuousSpace
 def calculate_social_force(agent, other_agents, obstacles, goal, repulsion_strength=2.0, repulsion_range=1.5, anisotropy_weight=0.5, relaxation_time=0.5):
     """ Calculate the instantaneous direction for an agent based on the Social Force Model.
 

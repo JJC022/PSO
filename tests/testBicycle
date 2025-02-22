@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from models.PedestrianBicycleModel import PedestrianBicycleModel
+from ..models.PedestrianBicycleModel import PedestrianBicycleModel
 
 class TestPedestrianBicycleModel(unittest.TestCase):
     def test_agent_initialization(self):

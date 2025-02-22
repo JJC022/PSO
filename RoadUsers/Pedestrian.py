@@ -1,45 +1,28 @@
-from mesa.experimental.continuous_space import ContinuousSpaceAgent
-from Movement import SocialForce
+from .MovingAgent import MovingAgent
 import random
 import numpy as np
 
-class Pedestrian(ContinuousSpaceAgent):
+class Pedestrian(MovingAgent):
     def __init__(self, model, space):
-        super().__init__(space, model)
+        print(f"Pedestrian model type: {type(model)}")
+        print(f"Pedestrian space type: {type(space)}")
+        super().__init__(space ,model)
+        self.model = model
         self.space = space
         #give cyclist desired speed and goal of travel
-        self.position = np.random.randint(0, model.space.x_max), np.random.randint(0, model.space.y_max) 
-        self._goal = np.array([0.0, 0.0])
-        self.velocity = np.array([0.0, 0.0])
-        self.acceleration = np.array([0.0, 0.0])
-        self.init_goal(self, model)
-        self.init_desired_speed(model)
+        self.init_desired_speed(model) 
         
 
     def step(self):
-        # Decision-making logic for bicycles
-        #print(f"Before Step: Agent position: {self.position}, Agent velocity: {self.velocity}, Agent acceleration: {self.acceleration}")
+        # Update teh velcoity and accleration, then move the agent for each step
         self.update_velocity(self.model)
         self.update_acceleration(self.model)
-        print(f"Agent velocity: {self.velocity}, Agent acceleration: {self.acceleration}")
         self.position = self.position + self.velocity
         
-        
 
-    def update_acceleration(self, model, movement_model="social force"): 
-        if movement_model == "social force": 
-            self.acceleration = SocialForce.calculate_social_force(agent=self, other_agents= model.agents, obstacles=[0, 0], goal= self._goal)
-
-    def update_velocity(self, model): 
-        self.velocity += self.acceleration
-    
+    #There is potential for moving this to the MovingAgent class
     def init_desired_speed(self, model): 
         self.desired_speed = .7 * random.uniform(0.5, 1.0)
-
-    def init_goal(self, model, destination="random"): 
-        if destination == "random":
-            self._goal = (random.randint(0, model.space.dimensions[0]), 
-              random.randint(0, model.space.dimensions[1]))
 
 
     def agent_portrayal(agent):
@@ -48,6 +31,6 @@ class Pedestrian(ContinuousSpaceAgent):
         portrayal.update({
                 "Shape": "circle",
                 "color": "tab:red",
-                "r": 0.5
+                "r": 5
             })
         return portrayal

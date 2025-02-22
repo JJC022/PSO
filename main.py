@@ -73,3 +73,4 @@ if __name__ == "__main__":
         model.step()
         print(f"position of first agent: {model.agents[0].pos} velocity of first agent: {model.agents[0].velocity}")
 
+
