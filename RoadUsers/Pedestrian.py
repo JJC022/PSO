@@ -4,11 +4,9 @@ import numpy as np
 
 class Pedestrian(MovingAgent):
     def __init__(self, model, space):
-        print(f"Pedestrian model type: {type(model)}")
-        print(f"Pedestrian space type: {type(space)}")
-        super().__init__(space ,model)
         self.model = model
         self.space = space
+        print(f"Received by Pedestrian. Space: {self.space} Model: {self.model}")
         #give cyclist desired speed and goal of travel
         self.init_desired_speed(model) 
         
@@ -26,11 +24,9 @@ class Pedestrian(MovingAgent):
 
 
     def agent_portrayal(agent):
-        portrayal = {"Filled": "true", "Layer": 0}
-        
-        portrayal.update({
+        portrayal = {
                 "Shape": "circle",
                 "color": "tab:red",
-                "r": 5
-            })
+                "size": 5
+            }
         return portrayal

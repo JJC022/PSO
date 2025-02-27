@@ -24,5 +24,14 @@ class Bench(ContinuousSpaceAgent):
                 self.location = specific_location
             else: 
                 raise ValueError("must provide specific_location when placement == 'specific'")
+            
+    def agent_portrayal(self):
+        portrayal = {
+                "Shape": "rectangle",
+                "color": "tab:green",
+                "size": 5
+            }
+        
+        return portrayal
 
 

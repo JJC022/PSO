@@ -25,14 +25,12 @@ class PedestrianBicycleModel(Model):
         self.num_pedestrians = num_pedestrians
         self.num_bicycles = num_bicycles
         self.num_obstacles = num_obstacles
-        print("Model type:", type(self))
-        print("Space type:", type(self.space))
-        print("Space dir:", dir(self.space))
+        
         
         # Create pedestrians and bicycles
-        pedestrians = Pedestrian.create_agents(space=self.space, n=num_pedestrians, model=self)
-        cyclists = Bicycle.create_agents(space=self.space, n=num_bicycles, model=self )
-        obstacles = Obstacle.Bench.create_agents(space=self.space, n=num_obstacles, model=self)
+        pedestrians = Pedestrian.create_agents(model=self,space=self.space, n=num_pedestrians)
+        cyclists = Bicycle.create_agents(model=self, space=self.space, n=num_bicycles)
+        obstacles = Obstacle.Bench.create_agents(model=self, space=self.space, n=num_obstacles)
 
     def check_collisions(self, radius=5.0): 
         #check every agent in model

@@ -1,6 +1,7 @@
 from mesa.visualization import SolaraViz, make_space_component, make_plot_component
 from models import PedestrianBicycleModel
-from RoadUsers import Pedestrian, Bicycle
+from RoadUsers import Pedestrian, Bicycle, Obstacle
+
 
 model_params = {
     "width": 100, 
@@ -18,6 +19,9 @@ def traffic_model_portrayal(agent):
         portrayal = Pedestrian.agent_portrayal(agent)
     if isinstance(agent, Bicycle): 
         portrayal = Bicycle.agent_portrayal(agent)
+    if isinstance(agent, Obstacle.Bench): 
+        portrayal = Obstacle.Bench.agent_portrayal(agent)
+
 
     return portrayal
 
