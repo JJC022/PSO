@@ -2,11 +2,10 @@ from .MovingAgent import MovingAgent
 import random
 
 class Bicycle(MovingAgent):
-    def __init__(self, model, space):
+    def __init__(self, model, space, logic='random', placement=None, index=None):
+        super().__init__(space, model,logic, placement)
         self.model = model
         self.space = space
-        print(f"Received by Bicycle. Space: {self.space} Model: {self.model}")
-        super().__init__(space, model)
         #give cyclist desired speed and goal of travel
         self.init_goal(model)
         self.init_desired_speed() 

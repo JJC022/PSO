@@ -1,4 +1,7 @@
 import numpy as np
+from collections import namedtuple
+from models import PedestrianBicycleModel
+from models.PedestrianBicycleModel import PedestrianBicycleModel
 
 class PSO:
     def __init__(self, n_particles, dimensions, bounds, model_class, model_params, steps=10):
@@ -10,7 +13,7 @@ class PSO:
         - n_particles: int -> Number of particles (solutions)
         - dimensions: int -> Number of parameters to optimize
         - bounds: tuple -> (lower_bound, upper_bound) for each dimension
-        - model_class: class -> The agent-based model class
+        - model_class: class -> The agent-based model 
         - model_params: dict -> Parameters to initialize the model
         - steps: int -> Number of simulation steps per fitness evaluation
         """
@@ -57,7 +60,7 @@ class PSO:
         fitness_score = total_collisions + (0.5 * total_near_misses)
         return fitness_score
 
-    def optimize(self, n_iterations, inertia=0.5, cognitive_weight=2.0, social_weight=2.0):
+    def optimize(self, n_iterations: int, inertia=0.5, cognitive_weight=2.0, social_weight=2.0):
         """
         Runs the PSO algorithm to optimize obstacle/path placement.
         
@@ -97,3 +100,18 @@ class PSO:
                     if score < self.global_best_score:
                         self.global_best_position = self.particles[i]
                         self.global_best_score = score
+
+class Particle:
+    def __init__(self, position, velocity):
+        """
+        Represents a single particle in the swarm.
+        
+        Parameters:
+        - position: np.ndarray -> The agent placements
+        - velocity: np.ndarray -> Velocity update for movement
+        """
+        self.position = position
+        self.velocity = velocity
+        self.best_position = position.copy()
+        self.fitness = float('inf')
+        self.best_fitness = float('inf')

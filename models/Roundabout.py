@@ -1,5 +1,5 @@
 from mesa import Agent, Model 
-from mesa.space import MultiGrid, PropertyLayer
+from mesa.space import MultiGrid
 from mesa.visualization import SolaraViz, make_space_component, make_plot_component
 import numpy as np 
 
@@ -64,8 +64,3 @@ class Pedestrian(Agent):
     def agent_portrayal(agent): 
         portrayal = {"Shape": "circle", "Filled": "true", "Layer": 0, "Color": "red", "r": 0.5} 
         return portrayal 
-# Create a grid visualization 
-grid = CanvasGrid(agent_portrayal, 20, 20, 500, 500) 
-# Launch the server 
-server = ModularServer(RoundaboutModel, [grid], "Roundabout Model", 20, 20, 10) 
-server.launch()

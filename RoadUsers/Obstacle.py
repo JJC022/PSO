@@ -2,32 +2,39 @@ from mesa.experimental.continuous_space import ContinuousSpaceAgent
 import numpy as np
 
 class Bench(ContinuousSpaceAgent): 
-    def __init__(self, model, space): 
+    def __init__(self, model, space, logic='random', placement=None, index=None):
         super().__init__(space, model)
         self.space = space
-        self.init_size
-        self.init_location
-
-        self.position = np.random.randint(0, model.space.x_max), np.random.randint(0, model.space.y_max)
+        self.model = model
+        self.init_size()
+        self.position = self.init_position()
     
     def init_size(self):
         self.length = np.random.randint(5, 15)
         self.width = np.random.randint(2, 6)
 
 
-    def init_location(self, placement="random", specific_location=None): 
-        if placement == "random":
-            self.location = [np.random.randint(0, self.model.space.dimensions[0]), np.randint(0, self.model.space.dimensions[1])]
+    def init_position(self, logic="random", placement=None): 
+        """
+        Should I change this to be the same as the one for MovingAgent? 
+        """
+        x_min, x_max = self.model.space.x_min, self.model.space.x_max
+        y_min, y_max = self.model.space.y_min, self.model.space.y_max
+        if logic == "random":
+            return[np.random.randint(x_min, x_max), np.random.randint(y_min, y_max)]
 
-        if placement == "specific":
-            if specific_location is not None: 
-                self.location = specific_location
+        if logic == "placed":
+            if placement is not None: 
+                return placement
             else: 
                 raise ValueError("must provide specific_location when placement == 'specific'")
             
+    def remove(self): 
+        super().remove()
+            
     def agent_portrayal(self):
         portrayal = {
-                "Shape": "rectangle",
+                "marker": "s",
                 "color": "tab:green",
                 "size": 5
             }

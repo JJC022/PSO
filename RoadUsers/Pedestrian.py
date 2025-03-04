@@ -3,10 +3,10 @@ import random
 import numpy as np
 
 class Pedestrian(MovingAgent):
-    def __init__(self, model, space):
+    def __init__(self, model, space, logic='random', placement=None):
+        super().__init__(space, model, logic, placement)
         self.model = model
         self.space = space
-        print(f"Received by Pedestrian. Space: {self.space} Model: {self.model}")
         #give cyclist desired speed and goal of travel
         self.init_desired_speed(model) 
         
