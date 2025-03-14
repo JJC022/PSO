@@ -1,5 +1,13 @@
 import numpy as np
-#this can all be refactored to be more readible using functions from mesa.experimental.ContinuousSpace
+"""
+Notes for refactoring this
+1. each step should really be its own function 
+2. Instead of passing the agent and other_agents pass the model and then access the agent set
+3. Add an angular momentum term a-la Fajen and Warren
+4. interaction terms with surfaces / elevation
+5. datacollector to measure different forces acting on agent 
+
+"""
 def calculate_social_force(agent, other_agents, obstacles, goal, repulsion_strength=2.0, repulsion_range=1.5, anisotropy_weight=0.5, relaxation_time=0.5):
     """ Calculate the instantaneous direction for an agent based on the Social Force Model.
 
@@ -51,6 +59,9 @@ def calculate_social_force(agent, other_agents, obstacles, goal, repulsion_stren
             direction_to_obstacle = difference_vector / distance_to_obstacle
             repulsive_force += repulsion_strength * np.exp(-distance_to_obstacle / repulsion_range) * direction_to_obstacle
 
+    # put a hard cap on speed
+    if np.linalg.norm(agent.velocity) >= np.linalg.norm(agent.max_speed): 
+        agent.velocity = agent.max_speed
     # Total force
     total_force = driving_force + repulsive_force
     return total_force

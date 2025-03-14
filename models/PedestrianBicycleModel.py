@@ -73,7 +73,7 @@ class PedestrianBicycleModel(Model):
         
         for pos in obstacle_positions:
             obstacle = Obstacle.Bench(self, self.space)
-            obstacle.init_position("placed", pos)
+            obstacle.init_position("placed", placement=pos)
         
         for pos in pedestrian_positions:
             pedestrian = Pedestrian(self, self.space) 

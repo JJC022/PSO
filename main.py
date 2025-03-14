@@ -2,7 +2,17 @@ from mesa.visualization import SolaraViz, make_space_component, make_plot_compon
 from models import PedestrianBicycleModel
 from RoadUsers import Pedestrian, Bicycle, Obstacle
 
+"""
+refactor plan 
 
+top level: dig in to mesa codebase and leverage the tools it provides as much as possible
+1. rework social force to use agent methods
+2. rework datacollector to select agent subsets more efficiently - use the .select() or .map() methods 
+3. rework PSO to use batchrunner 
+4. re-examine class hierarchy for plans in adding new varieites of agents 
+5. Have agents disappear when they get to their goal or reasonably close to it 
+    - trace their paths? 
+"""
 model_params = {
     "width": 100, 
    "height": 100,
@@ -72,9 +82,10 @@ page
 }
 """
 if __name__ == "__main__":
-    model = PedestrianBicycleModel.PedestrianBicycleModel(width=100, height=100, num_pedestrians=10, num_bicycles=10)
-    for _ in range(10):
-        model.step()
-        print(f"position of first agent: {model.agents[0].pos} velocity of first agent: {model.agents[0].velocity}")
+    page
+    #model = PedestrianBicycleModel.PedestrianBicycleModel(width=100, height=100, num_pedestrians=10, num_bicycles=10)
+    #for _ in range(10):
+    #    model.step()
+    #   print(f"position of first agent: {model.agents[0].pos} velocity of first agent: {model.agents[0].velocity}")
 
 
